@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/in_paft1"
+    android:orientation="vertical"
+    tools:context=".StartActivity">
+    <TextView
+        android:id="@+id/textView_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:text="play Alias"
+        android:textColor="@android:color/black"
+        android:textSize="30dp"
+        android:textStyle="italic"/>
+
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="300dp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:fontFamily="casual"
+        android:text="Play Games"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textColorHint="@android:color/holo_blue_bright"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        android:background="@drawable/button_start_game"/>
+
+    <Button
+        android:id="@+id/buttonSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@android:color/holo_blue_light"
+        android:fontFamily="casual"
+        android:text="Setting"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textColorHint="@android:color/holo_blue_bright"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        android:background="@drawable/button_start_game"/>
+
+
+</LinearLayout>

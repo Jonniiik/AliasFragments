@@ -1,6 +1,7 @@
 package eugene.com.alias;
 
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,33 +39,42 @@ public class PlayFragment extends Fragment {
 
     public PlayFragment() {
         // Required empty public constructor
+        Log.e("Проверка", "PlayFragment");
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_play, container, false);
-
-        Bundle bundle = this.getArguments();
-
+        Log.e("Проверка", "onCreateView");
         textViewTxtScore = (TextView) view.findViewById(R.id.textViewTxtScore);
+        textViewChronometer = (TextView) view.findViewById(R.id.textViewChronometer);
         textViewWords = (TextView) view.findViewById(R.id.textViewWords);
         textViewScore = (TextView) view.findViewById(R.id.textViewScore);
         buttonYes = (Button) view.findViewById(R.id.buttonYes);
+        buttonNo = (Button) view.findViewById(R.id.buttonNo);
         Log.e("Проверка", "Проверка");
         Collections.shuffle(myTeams);
         Log.e("Проверка", "Collections");
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Log.e("Проверка", "bundle onCreateView");
+            myCategories = bundle.getStringArrayList("myCategories");
+            wordsResult = bundle.getInt("wordsResult");
+            timeResult = bundle.getInt("timeResult");
+            myTeams = bundle.getParcelableArrayList("myTeams");
+        }
         newAttempt();
         addListenerOnButtonYes();
         addListenerOnButtonNo();
-
         return view;
     }
 
     public int turn(int attempt, ArrayList<Team> myTeams) {
-        Log.e("Проверка", "turn");
-        return (attempt % myTeams.size());}
+        return (attempt % myTeams.size());
+    }
 
     public String getTeam(int attempt, ArrayList<Team> myTeams) {
         Log.e("Проверка", "getTeam");
@@ -201,7 +212,7 @@ public class PlayFragment extends Fragment {
     public void GetReady() {
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle("Готовы: " + getTeam(attempt, myTeams));
-        builder.setMessage("Команда: " + getReader(attempt, myTeams) + "\nListener: " + getListener(attempt, myTeams));
+        builder.setMessage("Объясняет: " + getReader(attempt, myTeams) + "\nСлушает: " + getListener(attempt, myTeams));
         Log.e("Проверка", "GetReady");
         builder.setNeutralButton("Начинаем", new DialogInterface.OnClickListener() {
             @Override
@@ -242,9 +253,9 @@ public class PlayFragment extends Fragment {
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT);
         myTeamsSorted.clear();
         if (emptyCategories == true) {
-            builder.setTitle("Sorry, Все закончилось\nHIGHSCORE");
+            builder.setTitle("Sorry, Все закончилось\nРекорд");
         } else {
-            builder.setTitle("HIGHSCORE");
+            builder.setTitle("Счёт");
         }
         myTeams.get(turn(attempt, myTeams)).addScore(score);
         score = 0;
@@ -262,7 +273,51 @@ public class PlayFragment extends Fragment {
         }
 
         builder.setMessage(sb.toString());
-        builder.setNeutralButton("Процесс", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Далее", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (myTeams.get(turn(attempt, myTeams)).getScore() >= wordsResult || emptyCategories == true) {
+                    dialogInterface.cancel();
+                    announceWinner();
+                } else {
+                    attempt++;
+                    dialogInterface.cancel();
+                    newAttempt();
+                }
+            }
+        });
+        android.app.AlertDialog highscore = builder.create();
+        highscore.setCancelable(false);
+        highscore.setCanceledOnTouchOutside(false);
+        highscore.show();
+    }
+
+    public void HighscoreNew() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT);
+        myTeamsSorted.clear();
+        if (emptyCategories == true) {
+            builder.setTitle("Sorry, Все закончилось\nСчёт ");
+        } else {
+            builder.setTitle("Счёт ");
+        }
+
+        myTeams.get(turn(attempt, myTeams)).addScore(score);
+        score = 0;
+        for (Team team : myTeams) {
+            myTeamsSorted.add(team);
+        }
+        Collections.sort(myTeamsSorted, new Comparator<Team>() {
+            public int compare(Team t1, Team t2) {
+                return t2.getScore() - t1.getScore();
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < myTeamsSorted.size(); i++) {
+            sb.append(i + 1 + ". " + myTeamsSorted.get(i).getName() + " Счёт: " + myTeamsSorted.get(i).getScore() + "\n");
+        }
+
+        builder.setMessage(sb.toString());
+        builder.setNeutralButton("Далее", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (myTeams.get(turn(attempt, myTeams)).getScore() >= wordsResult || emptyCategories == true) {
@@ -283,13 +338,13 @@ public class PlayFragment extends Fragment {
 
     public void SeeTerms() {
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT);
-        builder.setTitle("Счет  " + score);
+        builder.setTitle("Счёт  " + score);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < EoTTerms.size(); i++) {
             sb.append(EoTTerms.get(i).getTerm() + " " + EoTTerms.get(i).getResult() + "\n");
         }
         builder.setMessage(sb.toString());
-        builder.setPositiveButton("Процесс", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Далее", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.cancel();
@@ -311,8 +366,8 @@ public class PlayFragment extends Fragment {
         play = true;
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT);
         builder.setTitle("Поздравляю");
-        builder.setMessage(myTeamsSorted.get(0).getName() + " are the real ....");
-        builder.setNegativeButton("CLOSE", new DialogInterface.OnClickListener() {
+        builder.setMessage(myTeamsSorted.get(0).getName() + "\n Сыграй ещё");
+        builder.setNegativeButton("Выйти?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Fragment fragment = new PlayFragment();
@@ -322,10 +377,10 @@ public class PlayFragment extends Fragment {
                 transaction.commit();
             }
         });
-        builder.setNeutralButton("BACK TO HIGHSCORES", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Заново?", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Highscore();
+                HighscoreNew();
             }
         });
         android.app.AlertDialog winner = builder.create();

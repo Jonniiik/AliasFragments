@@ -11,29 +11,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class StartActivity extends AppCompatActivity {
-    int wordsResult,timeResult;
+    int wordsResult, timeResult;
+    ArrayList<String> myCategories = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-//        SeekBar seekBarWord = (SeekBar) findViewById(R.id.seekBarWord);
-//        TextView wordsView = (TextView) findViewById(R.id.wordsView);
-//        SeekBar seekBarTime = (SeekBar) findViewById(R.id.seekBarTime);
-//        TextView timeView = (TextView) findViewById(R.id.timeView);
-////
-//        wordsView.setText(seekBarWord.getTextDirection());
-//        timeView.setText(seekBarTime.getTextDirection());
-//
-//        Bundle bundle = new Bundle();
-//        bundle.getInt("wordsResult");
-//        bundle.getInt("timeResult");
-//        Intent intent = new Intent(this, PlayFragment.class);
-//        intent.putExtra("wordsResult", wordsResult);
-//        intent.putExtra("timeResult", timeResult);
-//        startActivity(intent);
+        openFragment();
+    }
 
+    public void openFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = new StartFragment();
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();

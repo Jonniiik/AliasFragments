@@ -32,7 +32,7 @@ import java.util.Collections;
 public class CategoriesFragment extends Fragment {
     private ListView listViewCategories;
     private Button buttonTeam;
-    private TextView textView_length;
+    private TextView textViewLength;
     ArrayList<String> myAssets = new ArrayList<>();
     ArrayList<String> copeMyAssets = new ArrayList<>();
     ArrayList<String> myCategories = new ArrayList<>();
@@ -51,14 +51,14 @@ public class CategoriesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categories, container, false);
 
-        Bundle bundle = this.getArguments();
-
         getOpenAssets(view);
         addNewArray();
+        getBundle();
         addListenerButtonSelectCategories(view);
 
         return view;
     }
+
     private void getOpenAssets(View view) {
         AssetManager assetManager = getActivity().getApplicationContext().getAssets();
         try {
@@ -79,7 +79,7 @@ public class CategoriesFragment extends Fragment {
         listViewCategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                textView_length = (TextView) view.findViewById(R.id.textView_length);
+                textViewLength = (TextView) view.findViewById(R.id.textViewLength);
                 CheckedTextView checkedTextView = (CheckedTextView) view;
                 try {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(getActivity().getAssets().open(myAssets.get(position))));
@@ -91,7 +91,7 @@ public class CategoriesFragment extends Fragment {
                         }
                     }
                     reader.close();
-                  //  textView_length.setText(String.valueOf(length));
+                    //  textView_length.setText(String.valueOf(length));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -124,8 +124,6 @@ public class CategoriesFragment extends Fragment {
     }
 
     public void addListenerButtonSelectCategories(View view) {
-        final Bundle bundle = this.getArguments();
-        bundle.getBinder("myCategories");
         buttonTeam = (Button) view.findViewById(R.id.buttonTeam);
         buttonTeam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,33 +140,43 @@ public class CategoriesFragment extends Fragment {
                     transaction.replace(R.id.fragmentContainer, fragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                    bundle.getBinder("myCategories");
+                    Bundle bundle = new Bundle();
+                    bundle.putStringArrayList("myCategories", myCategories);
+                    bundle.putInt("wordsResult", wordsResult);
+                    bundle.putInt("timeResult", timeResult);
                     fragment.setArguments(bundle);
-                    Toast.makeText(getActivity(),"" + myCategories, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "" + myCategories, Toast.LENGTH_LONG).show();
 
-//                    Intent intent = null;
-//                    intent.putStringArrayListExtra("Categories", myCategories);
-//                    intent.putExtra("wResult", wordsResult);
-//                    intent.putExtra("tResult", timeResult);
-//                    startActivity(intent);
                 }
             }
         });
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-        if (resultCode == Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
             Uri uri = null;
-            if (resultData != null){uri = resultData.getData();}
+            if (resultData != null) {
+                uri = resultData.getData();
+            }
             readTextFile(uri);
         }
     }
+
+    public void getBundle() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            wordsResult = bundle.getInt("wordsResult");
+            timeResult = bundle.getInt("timeResult");
+        }
+    }
+
     private void readTextFile(Uri uri) {
         InputStream inputStream = null;
-        try{
+        try {
             inputStream = getActivity().getContentResolver().openInputStream(uri);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            while ((term = reader.readLine())!=null){
+            while ((term = reader.readLine()) != null) {
                 myCategories.add(term);
             }
             Collections.shuffle(myCategories);
@@ -177,11 +185,16 @@ public class CategoriesFragment extends Fragment {
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
-            Bundle bundle = this.getArguments();
-            bundle.getBinder("myCategories");
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList("myCategories", myCategories);
+            bundle.putInt("wordsResult", wordsResult);
+            bundle.putInt("timeResult", timeResult);
+            fragment.setArguments(bundle);
 
-            Toast.makeText(getActivity().getApplicationContext(),""+ textView_length, Toast.LENGTH_SHORT).show();
-        } catch (Exception e){e.printStackTrace();}
+            Toast.makeText(getActivity().getApplicationContext(), "" + textViewLength, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".PlayFragment">
+    tools:context=".PlayFragment"
+    android:background="@drawable/yellow_background2">
 
     <TextView
         android:id="@+id/textViewTxtScore"
         android:layout_width="120dp"
-        android:layout_height="45dp"
+        android:layout_height="52dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
@@ -17,7 +18,7 @@
         android:fontFamily="casual"
         android:text="Счет: "
         android:textColor="@color/blue"
-        android:textSize="25sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.032"
@@ -30,7 +31,7 @@
     <TextView
         android:id="@+id/textViewScore"
         android:layout_width="90dp"
-        android:layout_height="45dp"
+        android:layout_height="51dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
@@ -38,7 +39,7 @@
         android:fontFamily="casual"
         android:text="0"
         android:textColor="@color/blue"
-        android:textSize="25sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
@@ -54,7 +55,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/yellow"
+
         android:fontFamily="casual"
         android:textAlignment="center"
         android:textColor="@android:color/black"
@@ -73,11 +74,10 @@
         android:layout_marginTop="120dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@color/green"
         android:fontFamily="casual"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        android:textSize="36sp"
+        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
@@ -99,7 +99,7 @@
         android:textAlignment="center"
         android:textColor="?android:attr/textColorSecondary"
         android:textColorHint="@android:color/holo_blue_bright"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +121,7 @@
         android:text="No"
         android:textColor="?android:attr/textColorSecondary"
         android:textColorHint="@android:color/holo_blue_bright"
-        android:textSize="14sp"
+        android:textSize="20sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,5 +129,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.866" />
-
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

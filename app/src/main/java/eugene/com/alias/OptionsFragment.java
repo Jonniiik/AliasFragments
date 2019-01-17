@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
 public class OptionsFragment extends Fragment {
     private SeekBar seekBarWord;
     private SeekBar seekBarTime;
@@ -29,7 +28,6 @@ public class OptionsFragment extends Fragment {
     int wordsResult, timeResult;
 
     public OptionsFragment() {
-        // Required empty public constructor
     }
 
 
@@ -148,14 +146,9 @@ public class OptionsFragment extends Fragment {
                 transaction.addToBackStack(null);
                 transaction.commit();
                 Bundle bundle = new Bundle();
-                bundle.putInt("wordsResult",wordsResult);
-                bundle.putInt("timeResult",timeResult);
+                bundle.putInt("wordsResult", wordsResult);
+                bundle.putInt("timeResult", timeResult);
                 fragment.setArguments(bundle);
-
-//                Intent intent = new Intent(getActivity().getBaseContext(), StartActivity.class);
-//                intent.putExtra("wResult", wordsResult);
-//                intent.putExtra("tResult", timeResult);
-
 
                 Toast.makeText(getActivity().getApplicationContext(), "timeResult  " + timeResult + "   wordsResult  " + wordsResult + "  notWords " +
                         " " + notWords + "      Fine " + Fine, Toast.LENGTH_LONG).show();
